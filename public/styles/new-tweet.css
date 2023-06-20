@@ -20,9 +20,14 @@
   color: white;
 }
 
+#counter {
+    font-family: Bungee;
+}
+
 #tweet-text {
   border: 0px;
   border-bottom: solid 2px;
   background-color: #f3f1eb;
+  color: gray;
 }
 
