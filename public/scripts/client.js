@@ -4,9 +4,9 @@
  * Reminder: Use (and do all your DOM work in) jQuery's document ready function
  */
 
-
-
 $(document).ready(()=>{
+  
+
   // Test / driver code (temporary). Eventually will get this from the server.
   const tweetData = [
     {
@@ -32,7 +32,10 @@ $(document).ready(()=>{
     }
   ]
 
+
+  //create html element for each tweet dynamically
   const createTweetElement = (tweetObj) => {
+    const tweet_Time = timeago.format(tweetObj.created_at)
     const tweet = $(`<article class="tweet-article">
             <header>
               <div>
@@ -44,7 +47,8 @@ $(document).ready(()=>{
             <hr>
 
             <footer>
-              <p>${tweetObj.created_at}</p>
+            <span>${tweet_Time}</span> 
+            
               <div>
                 <span><i class="fa-solid fa-flag"></i></span>
                 <span><i class="fa-solid fa-retweet"></i></span>
@@ -59,22 +63,20 @@ $(document).ready(()=>{
     let tweetResult = [];
     // loops through tweets
     for (const tweet in tweets) {
-      tweetResult.push(createTweetElement(tweets[tweet]));
+      tweetResult.push(createTweetElement(tweets[tweet])); // calls createTweetElement for each tweet
     }
     return tweetResult;
-    // calls createTweetElement for each tweet
-    // takes return value and appends it to the tweets container
   }
-
-  const $tweet = renderTweets(tweetData);
-
-  // // Test / driver code (temporary)
-  console.log($tweet); // to see what it looks like
-  $('#tweets-container').append($tweet); // to add it to the page so we can make sure it's got all the right elements, classes, etc.
-
+  
   $('#tweet-form').on('submit', function(event) {
     event.preventDefault();
     const formData = $('#tweet-form').serialize();
+    const tweet = $('#tweet-text').val();
+    // Check if formData is empty or null
+    if (tweet === '' || tweet.length > 140) {
+      alert('Invalid tweet!');
+      return; // Exit the function
+    }
     $.post('/tweets', formData)
       .then(res => {
         console.log(res)
@@ -83,6 +85,23 @@ $(document).ready(()=>{
         console.log(err)
       })
   })
+
+  const $loadTweets = () => {
+    $.get('/tweets')
+      .then(res => {
+        $('#tweets-container').prepend(renderTweets(res)) //takes return value and appends it to the tweets container
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  $loadTweets();
+
+  // $('span.timeago').each(function() {
+  //   var timestamp = $(this).data('time');
+  //   $(this).text(timeago.format(timestamp));
+  // });
 });
 
 
