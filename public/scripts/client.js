@@ -32,47 +32,59 @@ $(document).ready(()=>{
     }
   ]
 
-//const $tweet = $(`<article class="tweet-article">Hello world</article>`);
+  const createTweetElement = (tweetObj) => {
+    const tweet = $(`<article class="tweet-article">
+            <header>
+              <div>
+                <h3><img src=${tweetObj.user.avatars} alt="profile pic"/>${tweetObj.user.name}</h3>
+                <h2>${tweetObj.user.handle}</h2>  
+              </div>
+              <p class="tweet">${tweetObj.content.text}</p>
+            </header>
+            <hr>
 
-const createTweetElement = (tweetObj) => {
-  const tweet = $(`<article class="tweet-article">
-          <header>
-            <div>
-              <h3><img src=${tweetObj.user.avatars} alt="profile pic"/>${tweetObj.user.name}</h3>
-              <h2>${tweetObj.user.handle}</h2>  
-            </div>
-            <p class="tweet">${tweetObj.content.text}</p>
-          </header>
-          <hr>
-
-          <footer>
-            <p>${tweetObj.created_at}</p>
-            <div>
-              <span><i class="fa-solid fa-flag"></i></span>
-              <span><i class="fa-solid fa-retweet"></i></span>
-              <span><i class="fa-solid fa-heart"></i></span>
-            </div>
-          </footer>
-        </article>`);
-    return tweet;
-}
-
-const renderTweets = function(tweets) {
-  let tweetResult = [];
-  // loops through tweets
-  for (const tweet in tweets) {
-    tweetResult.push(createTweetElement(tweets[tweet]));
+            <footer>
+              <p>${tweetObj.created_at}</p>
+              <div>
+                <span><i class="fa-solid fa-flag"></i></span>
+                <span><i class="fa-solid fa-retweet"></i></span>
+                <span><i class="fa-solid fa-heart"></i></span>
+              </div>
+            </footer>
+          </article>`);
+      return tweet;
   }
-  return tweetResult;
-  // calls createTweetElement for each tweet
-  // takes return value and appends it to the tweets container
-}
 
-const $tweet = renderTweets(tweetData);
+  const renderTweets = function(tweets) {
+    let tweetResult = [];
+    // loops through tweets
+    for (const tweet in tweets) {
+      tweetResult.push(createTweetElement(tweets[tweet]));
+    }
+    return tweetResult;
+    // calls createTweetElement for each tweet
+    // takes return value and appends it to the tweets container
+  }
 
-// // Test / driver code (temporary)
-console.log($tweet); // to see what it looks like
+  const $tweet = renderTweets(tweetData);
+
+  // // Test / driver code (temporary)
+  console.log($tweet); // to see what it looks like
   $('#tweets-container').append($tweet); // to add it to the page so we can make sure it's got all the right elements, classes, etc.
+
+  $('#tweet-form').on('submit', function(event) {
+    event.preventDefault();
+    const formData = $('#tweet-form').serialize();
+    $.post('/tweets', formData)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  })
 });
+
+
 
 
