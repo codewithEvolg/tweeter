@@ -19,3 +19,5 @@ Using HTML, CSS, JS, jQuery and AJAX front-end skills, and Node, Express back-en
 
 ## To Run Code
 - Use npm start to run code
+
+!["Tweet Page"](./public/images/tweet.png)
