@@ -29,6 +29,25 @@ section {
     color: rgb(221, 214, 208);
   }
 
+  /* Laptops / Desktops: minimum width of 1024px */
+  @media only screen and (min-width: 1024px) {
+    /* Write CSS rules that target Laptop/Desktop screen sizes and beyond */
+    body{
+      display: flex;
+      flex-direction: row;
+     }
+    
+    #tweet_container {
+      margin: 70px 30px;
+    }
+
+    header {
+      margin: 190px 30px;
+    }
+
+
+  }
+
 hr {
   height : 2px;
   background-color : gray;
